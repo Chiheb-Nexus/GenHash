@@ -66,7 +66,7 @@ class MyApp(Gtk.Window):
 
 		# Liste des algorithmes supportés
 		# Les autres algorithmes ne sont pas récommandés
-		algo = [[1,"sha1"], [2,"md5"], [4,"sha256"], [5,"sha384"], [6,"sha512"], [7,"OpenSSL"]]
+		algo = [[1,"sha1"], [2,"md5"], [4,"sha256"], [5,"sha384"], [6,"sha512"], [7,"OpenSSL : ripemd160"]]
 		liste = Gtk.ListStore(int,str)
 
 		for i in range(6):
@@ -94,6 +94,7 @@ class MyApp(Gtk.Window):
 		"""
 		path = self.entry.get_text()
 		alg_hash = self.combo.get_active()
+
 		try:
 			with open(path,'rb') as file_open :
 				block_size = 65536
@@ -110,9 +111,9 @@ class MyApp(Gtk.Window):
 				if alg_hash == 4:
 					hash_object = hashlib.sha512(str(contenu).encode())
 				if alg_hash == 5:
-					hash_object = hashlib.sha1(str(contenu).encode())
-				if alg_hash == 6:
-					hash_object = hashlib.new(str(contenu).encode())
+					hash_object = hashlib.new('ripemd160')
+					hash_object.update(str(contenu).encode())
+					
 				hex_dig = hash_object.hexdigest()
 				txt = str(hex_dig)
 			buffe = Gtk.TextBuffer()
