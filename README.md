@@ -2,8 +2,8 @@
 
 #Installation 
 Pour lancer le programme, tapez sur vos console : 
-             ~$ python3 hash.py 
-Veuillez noter que **GenHash** Gui dépend de python 3.
+~$ python3 hash.py 
+Veuillez noter que **GenHash** dépend de python 3 et de PyGI.
 
 
 #Description 
