@@ -28,5 +28,3 @@ Veuillez noter que **GenHash** Gui dépend de python 3.
 #Bugs 
 Veuillez notez les bugs sur https://github.com/Chiheb-Nexus/Youtube-dl_PyGtk_Gui
 
-![alt tag](http://2.bp.blogspot.com/-lOQ907T6HR4/VGJrl8iqP-I/AAAAAAAAAwk/UjrrIEGQoRs/s1600/S%C3%A9lection_001.png)
-![alt tag](http://4.bp.blogspot.com/-5PQqkKWkiAs/VHvvldhKvLI/AAAAAAAAA14/ubsbTNZmtNk/s1600/S%C3%A9lection_007.png)
