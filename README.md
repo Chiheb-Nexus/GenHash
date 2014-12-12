@@ -8,10 +8,10 @@ Veuillez noter que **GenHash** dépend de python 3 et de PyGI.
 
 #Description 
 
-**GenHash** est en cours d'évolution. Ce programme permet de donner le hashage des fichier à faible volume comme ceux les plus volumineux. Il prend un taille de block de hashage égal à 65536 oectet. Pour plus d'informations veuillez visiter ce lien sur Wikipédia : http://en.wikipedia.org/wiki/Secure_Hash_Algorithm  
+**GenHash** est en cours d'évolution. Ce programme permet de donner le hashage des fichier à faible volume comme ceux les plus volumineux. Il prend un taille de block de hashage égal à 65536 octets. Pour plus d'informations veuillez visiter ce lien sur Wikipédia : http://en.wikipedia.org/wiki/Secure_Hash_Algorithm  
 
 **12/12/2014** 
-**Fixed** - Support des hash suivants :
+**Update** - Support des hash suivants :
    * SHA1
    * MD5
    * SHA256
@@ -27,4 +27,5 @@ Veuillez noter que **GenHash** dépend de python 3 et de PyGI.
 
 #Bugs 
 Veuillez notez les bugs sur https://github.com/Chiheb-Nexus/Youtube-dl_PyGtk_Gui
+![alt tag](http://1.bp.blogspot.com/-YghRP1ZZUQg/VIqWSM_EuOI/AAAAAAAAA58/ojPqvs0rrXc/s1600/S%C3%A9lection_015.png)
 
