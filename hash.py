@@ -28,7 +28,7 @@ import getpass
 
 from gi.repository import Gtk, Gdk
 
-class MyApp(Gtk.Window):
+class GenHash(Gtk.Window):
 	"""
 	Main 
 	"""
@@ -36,7 +36,7 @@ class MyApp(Gtk.Window):
 		"""
 		initialize
 		"""
-		Gtk.Window.__init__(self, title="GenHash v0.1")
+		Gtk.Window.__init__(self, title="GenHash v0.2")
 		self.set_size_request(550,200)
 		self.connect("destroy", Gtk.main_quit)
 		# Fenêtre non modifiable
@@ -64,12 +64,19 @@ class MyApp(Gtk.Window):
 		# Wrap mode : Retourner à la ligne
 		self.view.set_wrap_mode(1)
 
+		# Scrollable TextView
+		scroll = Gtk.ScrolledWindow()
+		scroll.set_border_width(5)
+		scroll.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
+		scroll.add(self.view)
+
 		# Liste des algorithmes supportés
 		# Les autres algorithmes ne sont pas récommandés
-		algo = [[1,"sha1"], [2,"md5"], [4,"sha256"], [5,"sha384"], [6,"sha512"], [7,"OpenSSL : ripemd160"]]
-		liste = Gtk.ListStore(int,str)
+		algo = [[1,"sha1"], [2,"md5"], [3,"sha256"], [4,"sha384"], [5,"sha512"], [6,"OpenSSL : ripemd160"], [7, "Open SSL : DSA"],
+		[8, "Open SSL : MD4"],[9, 'base64'],[10,'Zlib : adler32'], [11, 'Zlib : crc32']]
 
-		for i in range(6):
+		liste = Gtk.ListStore(int,str)
+		for i in range(11):
 			liste.append(algo[i])
 		self.combo = Gtk.ComboBox.new_with_model_and_entry(liste)
 		self.combo.set_entry_text_column(1)
@@ -82,7 +89,7 @@ class MyApp(Gtk.Window):
 		table.attach(self.combo,1,2,2,3)
 		
 		vbox.pack_start(table, True, True, 10)
-		vbox.pack_start(self.view,True, True,0)
+		vbox.pack_start(scroll,True, True,0)
 		author = Gtk.Label("Chiheb NeXus | http://nexus-coding.blogspot.com")
 		vbox.pack_end(author,True, True, 0)
 		
@@ -113,9 +120,26 @@ class MyApp(Gtk.Window):
 				if alg_hash == 5:
 					hash_object = hashlib.new('ripemd160')
 					hash_object.update(str(contenu).encode())
-					
-				hex_dig = hash_object.hexdigest()
-				txt = str(hex_dig)
+				if alg_hash == 6:
+					hash_object = hashlib.new('DSA')
+					hash_object.update(str(contenu).encode())
+				if alg_hash == 7:
+					hash_object = hashlib.new('MD4')
+					hash_object.update(str(contenu).encode())
+				if alg_hash == 8:
+					import base64
+					hex_dig = base64.b64encode(contenu)
+				if alg_hash == 9:
+					import zlib
+					hex_dig = zlib.adler32(str(contenu).encode())
+				if alg_hash == 10:
+					import zlib
+					hex_dig = zlib.crc32(str(contenu).encode())
+
+				if alg_hash != 8 and alg_hash != 9 and alg_hash !=10:
+					hex_dig = hash_object.hexdigest()
+
+			txt = str(hex_dig)
 			buffe = Gtk.TextBuffer()
 			buffe.set_text(txt)
 			self.view.set_buffer(buffe)
@@ -137,7 +161,7 @@ class MyApp(Gtk.Window):
 
 	def error_msg(self):
 		"""
-		Erreur d'une mauvaise saisie d'un fichier
+		Erreur lors d'une mauvaise saisie d'un fichier
 		Ou faux type d'algorithme
 		"""
 		msg = ""
@@ -154,6 +178,6 @@ class MyApp(Gtk.Window):
 
 ####### Test #######
 if __name__ == '__main__':
-	win = MyApp()
+	win = GenHash()
 	Gtk.main()
 
