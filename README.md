@@ -26,6 +26,6 @@ Veuillez noter que **GenHash** dépend de python 3 et de PyGI.
 
 
 #Bugs 
-Veuillez notez les bugs sur https://github.com/Chiheb-Nexus/Youtube-dl_PyGtk_Gui
+Veuillez notez les bugs sur https://github.com/Chiheb-Nexus/GenHash
 ![alt tag](http://1.bp.blogspot.com/-YghRP1ZZUQg/VIqWSM_EuOI/AAAAAAAAA58/ojPqvs0rrXc/s1600/S%C3%A9lection_015.png)
 
