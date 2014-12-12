@@ -1,4 +1,4 @@
-**GenHash** est une interface graphique crée avec Python 3 et Gtk3+ (PyGI). Ce logiciel permet de générer des hash des fichiers en se basant sur le module hashlib de python 3.
+**GenHash** est une interface graphique crée avec Python 3 et Gtk3+ (PyGI). Ce logiciel permet de générer des hash des fichiers en se basant sur le module hashlib et zlib de python 3.
 
 #Installation 
 Pour lancer le programme, tapez sur vos console : 
