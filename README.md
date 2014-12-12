@@ -17,7 +17,7 @@ Veuillez noter que **GenHash** dépend de python 3 et de PyGI.
    * SHA256
    * SHA384
    * SHA512
-   * OpenSSL
+   * OpenSSL : ripemd160
   
 #TODO :
    - [ ]  Ajout des nouveaux algorithmes de hashage
