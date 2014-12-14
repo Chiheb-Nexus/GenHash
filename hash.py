@@ -37,7 +37,7 @@ class GenHash(Gtk.Window):
 		initialize
 		"""
 		Gtk.Window.__init__(self, title="GenHash v0.2")
-		self.set_size_request(550,200)
+		self.set_size_request(550,250)
 		self.connect("destroy", Gtk.main_quit)
 		# Fenêtre non modifiable
 		self.set_resizable(False)
@@ -88,7 +88,9 @@ class GenHash(Gtk.Window):
 		table.attach(hashage, 0,1,2, 3)
 		table.attach(self.combo,1,2,2,3)
 		
-		vbox.pack_start(table, True, True, 10)
+		notebook = Gtk.Notebook()
+		notebook.append_page(table, Gtk.Label("Generate"))
+		vbox.pack_start(notebook, True, True, 10)
 		vbox.pack_start(scroll,True, True,0)
 		author = Gtk.Label("Chiheb NeXus | http://nexus-coding.blogspot.com")
 		vbox.pack_end(author,True, True, 0)
@@ -104,45 +106,51 @@ class GenHash(Gtk.Window):
 
 		try:
 			with open(path,'rb') as file_open :
-				block_size = 65536
-				contenu = file_open.read(block_size)
+				block_size = 8192
 
 				if alg_hash == 0:
-					hash_object = hashlib.sha1(str(contenu).encode())
+					mhash = hashlib.sha1()
 				if alg_hash == 1:
-					hash_object = hashlib.md5(str(contenu).encode())
+					mhash = hashlib.md5()
 				if alg_hash == 2:
-					hash_object = hashlib.sha256(str(contenu).encode())
+					mhash = hashlib.sha256()
 				if alg_hash == 3:
-					hash_object = hashlib.sha384(str(contenu).encode())
+					mhash = hashlib.sha384()
 				if alg_hash == 4:
-					hash_object = hashlib.sha512(str(contenu).encode())
+					mhash = hashlib.sha512()
 				if alg_hash == 5:
-					hash_object = hashlib.new('ripemd160')
-					hash_object.update(str(contenu).encode())
+					mhash = hashlib.new('ripemd160')
 				if alg_hash == 6:
-					hash_object = hashlib.new('DSA')
-					hash_object.update(str(contenu).encode())
+					mhash = hashlib.new('DSA')
 				if alg_hash == 7:
-					hash_object = hashlib.new('MD4')
-					hash_object.update(str(contenu).encode())
+					mhash = hashlib.new('MD4')
 				if alg_hash == 8:
 					import base64
-					hex_dig = base64.b64encode(contenu)
+					mhash = base64.b64encode
 				if alg_hash == 9:
 					import zlib
-					hex_dig = zlib.adler32(str(contenu).encode())
+					mhash = zlib.adler32
 				if alg_hash == 10:
 					import zlib
-					hex_dig = zlib.crc32(str(contenu).encode())
+					mhash = zlib.crc32
+
+				while True:
+					contenu = file_open.read(block_size)
+					if not contenu:
+						break
+					if alg_hash == 8 or alg_hash == 9 or alg_hash == 10:
+						hex_dig = mhash(contenu)
+					else:
+						mhash.update(contenu)
 
 				if alg_hash != 8 and alg_hash != 9 and alg_hash !=10:
-					hex_dig = hash_object.hexdigest()
+					hex_dig = mhash.hexdigest()
 
 			txt = str(hex_dig)
 			buffe = Gtk.TextBuffer()
 			buffe.set_text(txt)
 			self.view.set_buffer(buffe)
+	
 		except:
 			self.error_msg()
 

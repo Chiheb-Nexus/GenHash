@@ -26,6 +26,7 @@ Veuillez noter que **GenHash** dépend de python 3 et de PyGI.
   
 #TODO :
    - [x]  Ajout des nouveaux algorithmes de hashage
+   - [x]  Correction des fonctions de hashage
    - [ ]  Hashage d'une entrée par l'utilisateur
    - [ ]  Ajouter des liens de documentation des algorithmes listés
 
