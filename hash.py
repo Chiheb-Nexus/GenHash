@@ -106,7 +106,7 @@ class GenHash(Gtk.Window):
 
 		try:
 			with open(path,'rb') as file_open :
-				block_size = 8192
+				block_size = 65536 
 
 				if alg_hash == 0:
 					mhash = hashlib.sha1()
