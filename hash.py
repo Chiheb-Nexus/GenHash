@@ -25,8 +25,10 @@
 import hashlib
 import os
 import getpass
+import threading
+import time
 
-from gi.repository import Gtk, Gdk
+from gi.repository import Gtk, GLib, GObject
 
 class GenHash(Gtk.Window):
 	"""
@@ -36,7 +38,7 @@ class GenHash(Gtk.Window):
 		"""
 		initialize
 		"""
-		Gtk.Window.__init__(self, title="GenHash v0.2")
+		Gtk.Window.__init__(self, title="GenHash v0.3")
 		self.set_size_request(550,250)
 		self.connect("destroy", Gtk.main_quit)
 		# Fenêtre non modifiable
@@ -52,9 +54,10 @@ class GenHash(Gtk.Window):
 		info = Gtk.Label("Veuillez saisir le chemin du fichier")
 		choose = Gtk.Button("Choisir fichier")
 		choose.connect("clicked", self.choix_destination)
-		button = Gtk.Button("Calculer")
+		self.button = Gtk.Button()
+		self.button.set_label("Calculer")
 		hashage = Gtk.Label("Choisir Algorithme")
-		button.connect("clicked", self.hash_calc)
+		self.button.connect("clicked", self.hash_calc)
 		self.entry = Gtk.Entry()
 		user = getpass.getuser()
 		self.entry.set_text("/home/"+user)
@@ -81,12 +84,16 @@ class GenHash(Gtk.Window):
 		self.combo = Gtk.ComboBox.new_with_model_and_entry(liste)
 		self.combo.set_entry_text_column(1)
 
+		# Spinner
+		self.spin = Gtk.Spinner()
+
 		table.attach(info, 0, 2, 0, 1)
 		table.attach(choose, 0, 1, 1, 2,Gtk.AttachOptions.SHRINK,Gtk.AttachOptions.SHRINK)
 		table.attach(self.entry, 1, 2, 1, 2)
-		table.attach(button, 1, 2, 3, 4,Gtk.AttachOptions.FILL,Gtk.AttachOptions.SHRINK)
+		table.attach(self.button, 1, 2, 3, 4,Gtk.AttachOptions.FILL,Gtk.AttachOptions.SHRINK)
 		table.attach(hashage, 0,1,2, 3)
 		table.attach(self.combo,1,2,2,3)
+		table.attach(self.spin, 0, 1, 3, 4)
 		
 		notebook = Gtk.Notebook()
 		notebook.append_page(table, Gtk.Label("Generate"))
@@ -99,7 +106,16 @@ class GenHash(Gtk.Window):
 
 	def hash_calc(self, widget):
 		"""
-		block_size : taille de block de hashage en octet
+		block_size : taille de block de lecture du fichier en octet
+		Gtk.events_pending() : Function returns True if
+		       any events are pending. This can be used to update
+		       the user interface and invoke timeouts etc. 
+		        while doing some time intensive computation.
+		Gtk.main_iteration() : Function runs a single iteration 
+		        of the mainloop. If no events are waiting to be 
+		        processed PyGTK will block until the next event 
+		        is noticed if block is True. This function is identical
+		         to the gtk.main_iteration_do() function.
 		"""
 		path = self.entry.get_text()
 		alg_hash = self.combo.get_active()
@@ -107,6 +123,8 @@ class GenHash(Gtk.Window):
 		try:
 			with open(path,'rb') as file_open :
 				block_size = 65536 
+				self.spin.start()
+				self.button.set_label("Chargement")
 
 				if alg_hash == 0:
 					mhash = hashlib.sha1()
@@ -136,7 +154,13 @@ class GenHash(Gtk.Window):
 
 				while True:
 					contenu = file_open.read(block_size)
+					# Ne pas bloquer la GUI lors de l'ouverture du fichier
+					# La lecture du fichier passe en démon et la GUI reste active
+					while Gtk.events_pending():
+						Gtk.main_iteration()
 					if not contenu:
+						self.spin.stop()
+						self.button.set_label("Calculer")
 						break
 					if alg_hash == 8 or alg_hash == 9 or alg_hash == 10:
 						hex_dig = mhash(contenu)
@@ -150,7 +174,7 @@ class GenHash(Gtk.Window):
 			buffe = Gtk.TextBuffer()
 			buffe.set_text(txt)
 			self.view.set_buffer(buffe)
-	
+
 		except:
 			self.error_msg()
 
@@ -188,4 +212,5 @@ class GenHash(Gtk.Window):
 if __name__ == '__main__':
 	win = GenHash()
 	Gtk.main()
+
 

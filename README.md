@@ -2,13 +2,14 @@
 
 #Installation 
 Pour lancer le programme, tapez sur vos console : 
-~$ python3 hash.py 
+ - ~$ python3 hash.py 
 Veuillez noter que **GenHash** dépend de python 3 et de PyGI.
 
 
 #Description 
 
-**GenHash** est en cours d'évolution. Ce programme permet de donner le hashage des fichier à faible volume comme ceux les plus volumineux. Il prend un taille de block de hashage égal à 65536 octets. Pour plus d'informations veuillez visiter ce lien sur Wikipédia : http://en.wikipedia.org/wiki/Secure_Hash_Algorithm  
+**GenHash** est en cours d'évolution. Ce programme permet de donner le hashage des fichier à faible volume comme ceux les plus volumineux. Il prend un taille de block de lecture du fichier égal à 65536 octets.
+Pour plus d'informations veuillez visiter ce lien sur Wikipédia : http://en.wikipedia.org/wiki/Secure_Hash_Algorithm  
 
 **12/12/2014** 
 **Update** - Support des hash suivants :
@@ -27,11 +28,13 @@ Veuillez noter que **GenHash** dépend de python 3 et de PyGI.
 #TODO :
    - [x]  Ajout des nouveaux algorithmes de hashage
    - [x]  Correction des fonctions de hashage
+   - [x]  La GUI ne reste active lors de la génération du hash d'un fichier volumineux
+   - [x]  Ajout d'un Spinner pour indiquer que le processus de calcul est encore actif
    - [ ]  Hashage d'une entrée par l'utilisateur
    - [ ]  Ajouter des liens de documentation des algorithmes listés
 
 
 #Bugs 
 Veuillez notez les bugs sur https://github.com/Chiheb-Nexus/GenHash
-![alt tag](http://1.bp.blogspot.com/-YghRP1ZZUQg/VIqWSM_EuOI/AAAAAAAAA58/ojPqvs0rrXc/s1600/S%C3%A9lection_015.png)
+![alt tag](http://2.bp.blogspot.com/-GqBpHpEs9Pw/VI5h9odJqQI/AAAAAAAAA8Y/y1QLnAYDGBc/s1600/S%C3%A9lection_002.png)
 
