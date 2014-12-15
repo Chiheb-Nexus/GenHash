@@ -164,9 +164,7 @@ class GenHash(Gtk.Window):
 						hex_dig = mhash(contenu)
 					else:
 						mhash.update(contenu)
-
-				if alg_hash != 8 and alg_hash != 9 and alg_hash !=10:
-					hex_dig = mhash.hexdigest()
+						hex_dig = mhash.hexdigest()
 
 			txt = str(hex_dig)
 			buffe = Gtk.TextBuffer()
