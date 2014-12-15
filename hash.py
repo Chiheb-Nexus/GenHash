@@ -25,8 +25,6 @@
 import hashlib
 import os
 import getpass
-import threading
-import time
 
 from gi.repository import Gtk, GLib, GObject
 
