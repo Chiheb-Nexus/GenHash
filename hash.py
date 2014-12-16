@@ -25,7 +25,8 @@
 import hashlib
 import os
 import getpass
-
+from doc_links import *
+from compare import *
 from gi.repository import Gtk, GLib, GObject
 
 class GenHash(Gtk.Window):
@@ -36,7 +37,7 @@ class GenHash(Gtk.Window):
 		"""
 		initialize
 		"""
-		Gtk.Window.__init__(self, title="GenHash v0.3")
+		Gtk.Window.__init__(self, title="GenHash v0.4")
 		self.set_size_request(550,250)
 		self.connect("destroy", Gtk.main_quit)
 		# Fenêtre non modifiable
@@ -55,7 +56,7 @@ class GenHash(Gtk.Window):
 		self.button = Gtk.Button()
 		self.button.set_label("Calculer")
 		hashage = Gtk.Label("Choisir Algorithme")
-		self.button.connect("clicked", self.hash_calc)
+		self.button.connect("clicked", self.hash_calc,"main")
 		self.entry = Gtk.Entry()
 		user = getpass.getuser()
 		self.entry.set_text("/home/"+user)
@@ -84,6 +85,9 @@ class GenHash(Gtk.Window):
 
 		# Spinner
 		self.spin = Gtk.Spinner()
+		# Effacer log
+		log = Gtk.Button("Effacer log")
+		log.connect("clicked", self.effacer_log)
 
 		table.attach(info, 0, 2, 0, 1)
 		table.attach(choose, 0, 1, 1, 2,Gtk.AttachOptions.SHRINK,Gtk.AttachOptions.SHRINK)
@@ -95,14 +99,28 @@ class GenHash(Gtk.Window):
 		
 		notebook = Gtk.Notebook()
 		notebook.append_page(table, Gtk.Label("Generate"))
+		notebook.insert_page(comparer(self), Gtk.Label("Comparaison"), 2)
+		notebook.insert_page(links(self), Gtk.Label("Documentations"), 3)
+
 		vbox.pack_start(notebook, True, True, 10)
+		vbox.pack_start(log, False, False,0)
 		vbox.pack_start(scroll,True, True,0)
 		author = Gtk.Label("Chiheb NeXus | http://nexus-coding.blogspot.com")
 		vbox.pack_end(author,True, True, 0)
 		
 		self.show_all()
 
-	def hash_calc(self, widget):
+	def effacer_log(self, widget):
+		""" 
+		Effacer le log de TextView
+		"""
+		buf = Gtk.TextBuffer()
+		txt = ""
+		buf.set_text(txt)
+		self.view.set_buffer(buf)
+
+
+	def hash_calc(self, widget, data):
 		"""
 		block_size : taille de block de lecture du fichier en octet
 		Gtk.events_pending() : Function returns True if
@@ -116,13 +134,21 @@ class GenHash(Gtk.Window):
 		         to the gtk.main_iteration_do() function.
 		"""
 		path = self.entry.get_text()
-		alg_hash = self.combo.get_active()
+		if data == "main":
+			alg_hash = self.combo.get_active()
+		if data == "comparer":
+			alg_hash = comparer.combo2.get_active()
 
 		try:
 			with open(path,'rb') as file_open :
 				block_size = 65536 
-				self.spin.start()
-				self.button.set_label("Chargement")
+				
+				if data == "main" and path !="" and alg_hash != -1:
+					self.spin.start()
+					self.button.set_label("Chargement")
+				if data == "comparer" and path !="" and alg_hash != -1:
+					comparer.spin.start()
+					comparer.compar.set_label("Loading")
 
 				if alg_hash == 0:
 					mhash = hashlib.sha1()
@@ -157,8 +183,12 @@ class GenHash(Gtk.Window):
 					while Gtk.events_pending():
 						Gtk.main_iteration()
 					if not contenu:
-						self.spin.stop()
-						self.button.set_label("Calculer")
+						if data == "main":
+							self.spin.stop()
+							self.button.set_label("Calculer")
+						if data == "comparer":
+							comparer.spin.stop()
+							comparer.compar.set_label("Comparer")
 						break
 					if alg_hash == 8 or alg_hash == 9 or alg_hash == 10:
 						hex_dig = mhash(contenu)
@@ -166,13 +196,25 @@ class GenHash(Gtk.Window):
 						mhash.update(contenu)
 						hex_dig = mhash.hexdigest()
 
-			txt = str(hex_dig)
-			buffe = Gtk.TextBuffer()
-			buffe.set_text(txt)
-			self.view.set_buffer(buffe)
+			if data == "main":
+				txt = str(hex_dig)
+				buffe = Gtk.TextBuffer()
+				buffe.set_text(txt)
+				self.view.set_buffer(buffe)
+			if data == "comparer":
+				if str(hex_dig) == comparer.entrer_hash.get_text():
+					buffe = Gtk.TextBuffer()
+					txt = "Égaux"
+					buffe.set_text(txt)
+					self.view.set_buffer(buffe)
+				else:
+					buffe = Gtk.TextBuffer()
+					txt = "Non égaux"
+					buffe.set_text(txt)
+					self.view.set_buffer(buffe)
 
 		except:
-			self.error_msg()
+			self.error_msg(data)
 
 	def choix_destination(self, widget):
 		"""
@@ -183,22 +225,31 @@ class GenHash(Gtk.Window):
 		response = dialog.run()
 		if response == Gtk.ResponseType.OK:
 			self.entry.set_text(dialog.get_filename())
+			comparer.entry_hash.set_text(dialog.get_filename())
 			dialog.destroy()
 		if response == Gtk.ResponseType.CANCEL:
 			dialog.destroy()
 
-	def error_msg(self):
+	def error_msg(self, data):
 		"""
 		Erreur lors d'une mauvaise saisie d'un fichier
 		Ou faux type d'algorithme
 		"""
 		msg = ""
-		if self.combo.get_active() == -1:
-			msg = "choisir un algorithme"
-		if self.entry.get_text() =="":
-			msg = "choisir un fichier"
-		if os.path.isfile(self.entry.get_text()) == False:
-			msg = "indiquer un chemin d'un fichier valide"
+		if data == "main":
+			if self.combo.get_active() == -1:
+				msg = "choisir un algorithme"
+			if self.entry.get_text() =="":
+				msg = "choisir un fichier"
+			if os.path.isfile(self.entry.get_text()) == False:
+				msg = "indiquer un chemin d'un fichier valide"
+		if data == "comparer":
+			if comparer.combo2.get_active() == -1:
+				msg = "choisir un algorithme"
+			if comparer.entry_hash.get_text() =="":
+				msg = "choisir un fichier"
+			if os.path.isfile(comparer.entry_hash.get_text()) == False:
+				msg = "choisir un fichier"
 
 		info = Gtk.MessageDialog(self, 0, Gtk.MessageType.INFO, Gtk.ButtonsType.OK, "Avant de procéder aux calculs, veuillez "+msg)
 		info.run()
