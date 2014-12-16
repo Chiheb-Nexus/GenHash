@@ -30,11 +30,11 @@ Pour plus d'informations veuillez visiter ce lien sur Wikipédia : http://en.wik
    - [x]  Correction des fonctions de hashage
    - [x]  La GUI ne reste active lors de la génération du hash d'un fichier volumineux
    - [x]  Ajout d'un Spinner pour indiquer que le processus de calcul est encore actif
-   - [ ]  Hashage d'une entrée par l'utilisateur
-   - [ ]  Ajouter des liens de documentation des algorithmes listés
+   - [x]  Hashage d'une entrée par l'utilisateur
+   - [x]  Ajouter des liens de documentation des algorithmes listés
 
 
 #Bugs 
 Veuillez notez les bugs sur https://github.com/Chiheb-Nexus/GenHash
-![alt tag](http://2.bp.blogspot.com/-GqBpHpEs9Pw/VI5h9odJqQI/AAAAAAAAA8Y/y1QLnAYDGBc/s1600/S%C3%A9lection_002.png)
+![alt tag](http://3.bp.blogspot.com/-lo4qTwpy3So/VJCjx-Z4HfI/AAAAAAAAA8o/7KOqUaaK00Q/s1600/S%C3%A9lection_004.png)
 
