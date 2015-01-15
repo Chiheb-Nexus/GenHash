@@ -1,0 +1,14 @@
+#hash{
+	background-color: #C0C0C0;
+	color : black;
+}
+GtkNotebook{
+	background: #ADD8E6;
+	color: black;
+	border-color: white;
+	border-width: 2px;
+}
+GtkLinkButton{
+	background: black;
+	color: white;
+}

@@ -37,6 +37,7 @@ def comparer(self):
 	comparer.entry_hash.set_text("/home/"+user)
 	label_hash = Gtk.Label("Choisir Algorithme")
 	comparer.compar = Gtk.Button("Comparer")
+	comparer.compar.set_focus_on_click(False)
 	comparer.compar.connect("clicked", self.hash_calc,"comparer")
 	comparer.spin = Gtk.Spinner()
 
@@ -63,7 +64,7 @@ def comparer(self):
 	table.attach(label_hash, 0,1,2,3)
 	table.attach(comparer.combo2, 1,2,2,3)
 	table.attach(comparer.spin,0,1,3,4)
-	table.attach(comparer.compar,1,2,3,4,Gtk.AttachOptions.FILL,Gtk.AttachOptions.SHRINK)
+	table.attach(comparer.compar,1,2,3,4,Gtk.AttachOptions.SHRINK,Gtk.AttachOptions.SHRINK)
 
 	return table
 

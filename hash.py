@@ -27,7 +27,8 @@ import os
 import getpass
 from doc_links import *
 from compare import *
-from gi.repository import Gtk, GLib, GObject
+from about import *
+from gi.repository import Gtk, GLib, GObject, Gdk
 
 class GenHash(Gtk.Window):
 	"""
@@ -37,7 +38,7 @@ class GenHash(Gtk.Window):
 		"""
 		initialize
 		"""
-		Gtk.Window.__init__(self, title="GenHash v0.4")
+		Gtk.Window.__init__(self, title="GenHash v0.5")
 		self.set_size_request(550,250)
 		self.connect("destroy", Gtk.main_quit)
 		# Fenêtre non modifiable
@@ -45,7 +46,20 @@ class GenHash(Gtk.Window):
 		self.set_position(Gtk.WindowPosition.CENTER)
 		self.set_icon_from_file("img/icon.png")
 
+		# CSS Theme
+		self.set_name("hash")
+		style_provider = Gtk.CssProvider()
+		css = open("style.css", "rb")
+		css_data = css.read()
+		css.close()
+		style_provider.load_from_data(css_data)
+		Gtk.StyleContext.add_provider_for_screen(
+			Gdk.Screen.get_default(),
+			style_provider,
+			Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION)
+
 		vbox = Gtk.VBox()
+		vbox.set_homogeneous(False)
 		self.add(vbox)
 
 		table = Gtk.Table(2,5)
@@ -53,8 +67,9 @@ class GenHash(Gtk.Window):
 		info = Gtk.Label("Veuillez saisir le chemin du fichier")
 		choose = Gtk.Button("Choisir fichier")
 		choose.connect("clicked", self.choix_destination)
-		self.button = Gtk.Button()
-		self.button.set_label("Calculer")
+		self.button = Gtk.Button("calculer")
+		# Le focus sera sur le dernier boutton avant ce dernier
+		self.button.set_focus_on_click(False)
 		hashage = Gtk.Label("Choisir Algorithme")
 		self.button.connect("clicked", self.hash_calc,"main")
 		self.entry = Gtk.Entry()
@@ -87,13 +102,16 @@ class GenHash(Gtk.Window):
 		self.spin = Gtk.Spinner()
 		# Effacer log
 		log = Gtk.Button("Effacer log")
+		# Relief Style = contour du boutton visible ou non
+		log.set_relief(Gtk.ReliefStyle.NONE)
+		log.set_focus_on_click(False)
 		log.connect("clicked", self.effacer_log)
 
 		table.attach(info, 0, 2, 0, 1)
 		table.attach(choose, 0, 1, 1, 2,Gtk.AttachOptions.SHRINK,Gtk.AttachOptions.SHRINK)
 		table.attach(self.entry, 1, 2, 1, 2)
-		table.attach(self.button, 1, 2, 3, 4,Gtk.AttachOptions.FILL,Gtk.AttachOptions.SHRINK)
-		table.attach(hashage, 0,1,2, 3)
+		table.attach(self.button, 1, 2, 3, 4,Gtk.AttachOptions.SHRINK,Gtk.AttachOptions.SHRINK)
+		table.attach(hashage, 0,1,2, 3, Gtk.AttachOptions.SHRINK,Gtk.AttachOptions.SHRINK)
 		table.attach(self.combo,1,2,2,3)
 		table.attach(self.spin, 0, 1, 3, 4)
 		
@@ -101,11 +119,12 @@ class GenHash(Gtk.Window):
 		notebook.append_page(table, Gtk.Label("Generate"))
 		notebook.insert_page(comparer(self), Gtk.Label("Comparaison"), 2)
 		notebook.insert_page(links(self), Gtk.Label("Documentations"), 3)
+		notebook.insert_page(about(self), Gtk.Label("À propos"), 4)
 
 		vbox.pack_start(notebook, True, True, 10)
 		vbox.pack_start(log, False, False,0)
 		vbox.pack_start(scroll,True, True,0)
-		author = Gtk.Label("Chiheb NeXus | http://nexus-coding.blogspot.com")
+		author = Gtk.Label("Chiheb NeXus© - 2014 | http://nexus-coding.blogspot.com")
 		vbox.pack_end(author,True, True, 0)
 		
 		self.show_all()
