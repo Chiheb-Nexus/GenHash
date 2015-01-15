@@ -36,5 +36,6 @@ Pour plus d'informations veuillez visiter ce lien sur Wikipédia : http://en.wik
 
 #Bugs 
 Veuillez notez les bugs sur https://github.com/Chiheb-Nexus/GenHash
-![alt tag](http://3.bp.blogspot.com/-lo4qTwpy3So/VJCjx-Z4HfI/AAAAAAAAA8o/7KOqUaaK00Q/s1600/S%C3%A9lection_004.png)
+![alt tag](http://1.bp.blogspot.com/-b83reS3RS2Q/VLgTHIytSsI/AAAAAAAABAU/Vti8rHS2O5g/s1600/S%C3%A9lection_002.png)
+
 
